@@ -14,12 +14,14 @@ fn main() {
         .open("my_file.txt")
         .unwrap();
 
-    file.seek(SeekFrom::End(0)).unwrap();
+    // file.seek(SeekFrom::End(0)).unwrap(); - not necessary - see note below
     file.write(b"This is the data I want to append.").unwrap();
 }
 ```
 
 The above ## Code example opens the file `my_file.txt` in write-only mode and appends the data `This is the data I want to append.` to the end of the file.
+
+SeekFrom is not necessary - per the OpenOptions page below: `Append mode guarantees that writes will be positioned at the current end of file, even when there are other processes or threads appending to the same file. This is unlike seek(SeekFrom::End(0)) followed by write(), which has a race between seeking and writing during which another writer can write, with our write() overwriting their data.`
 
 ## Helpful links
 - [std::fs::OpenOptions](https://doc.rust-lang.org/std/fs/struct.OpenOptions.html)
